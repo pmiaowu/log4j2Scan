@@ -126,8 +126,17 @@ public class RemoteCmdScan extends AAppExtension {
         String key = CustomHelpers.randomStr(15);
         String dnsLogUrl = key + "." + this.dnsLog.run().getTemporaryDomainName();
 
+        // 构造header头的payload
+        List<String> newHeaders = new ArrayList<>();
+        List<String> headers = this.yamlReader.getStringList("application.remoteCmdExtension.config.headers");
+        if (headers != null && headers.size() >= 1) {
+            for (int i = 0; i < headers.size(); i++) {
+                newHeaders.add(headers.get(i) + ": " + payload.replace("dnslog-url", (i + 1) + "." + dnsLogUrl));
+            }
+        }
+
         // 发送请求
-         IHttpRequestResponse newHttpRequestResponse = analyzedRequest.makeHttpRequest(parameter, payload.replace("dnslog-url", dnsLogUrl));
+        IHttpRequestResponse newHttpRequestResponse = analyzedRequest.makeHttpRequest(parameter, payload.replace("dnslog-url", dnsLogUrl), newHeaders);
 
         // 相关变量设置
         this.keyArrayList.add(key);

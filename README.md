@@ -19,7 +19,21 @@ log4jScan 一个用于企业内部排查log4j漏洞的插件
 目前的功能如下
 - 远程命令执行
 
+# 检测规则
+
+暂时只支持以下类型,进行扫描log4j的jndi漏洞
+
+- GET
+- POST
+- Cookie
+- JSON
+- Xml
+- Body
+- Header
+
 # 请注意!!!!
+
+<font color=red>下载完毕以后,请务必打开 /resources/config.yml 看看配置文件,里面有很多自定义的功能,可以自由选择!!</font>
 
 推荐使用burp2.x的版本,因为在新版burp中,被动扫描会自动成多线程扫描,扫描速度会快很多很多
 

@@ -96,17 +96,35 @@ public class BurpAnalyzedRequest {
 
     /**
      * 会根据程序类型自动组装请求的 请求发送接口
+     *
+     * @param p
+     * @param payload
+     * @param headers
+     * @return
      */
-    public IHttpRequestResponse makeHttpRequest(IParameter p, String payload) {
+    public IHttpRequestResponse makeHttpRequest(IParameter p, String payload, List<String> headers) {
         byte[] newRequest;
 
+        // headers头处理
+        List<String> newHeaders = new ArrayList<>();
+        if (headers != null && headers.size() != 0) {
+            for (String h : this.analyzeRequest().getHeaders()) {
+                if (!CustomHelpers.listKeySearch(h.split(": ")[0], headers)) {
+                    newHeaders.add(h);
+                }
+            }
+            newHeaders.addAll(headers);
+        } else {
+            newHeaders = this.analyzeRequest().getHeaders();
+        }
 
+        // 数据处理
         if (this.analyzeRequest().getContentType() == 4) {
             // POST请求包提交的数据为json时的处理
-            newRequest = this.buildHttpMessage(p, payload);
+            newRequest = this.buildParameter(p, payload, this.buildHttpMessage(p, payload), newHeaders);
         } else {
             // 普通数据格式的处理
-            newRequest = this.buildParameter(p, payload);
+            newRequest = this.buildParameter(p, payload, null, newHeaders);
         }
 
         IHttpRequestResponse newHttpRequestResponse = this.callbacks.makeHttpRequest(this.requestResponse().getHttpService(), newRequest);
@@ -142,10 +160,19 @@ public class BurpAnalyzedRequest {
      * @param payload
      * @return
      */
-    private byte[] buildParameter(IParameter p, String payload) {
+    private byte[] buildParameter(IParameter p, String payload, byte[] request, List<String> headers) {
         byte[] newRequest;
 
-        newRequest = this.requestResponse().getRequest();
+        if (request == null) {
+            newRequest = this.requestResponse().getRequest();
+        } else {
+            newRequest = request;
+        }
+
+        // 添加header头
+        newRequest = this.helpers.buildHttpMessage(
+                headers,
+                this.customBurpHelpers.getHttpRequestBody(newRequest).getBytes());
 
         IParameter newParameter = this.helpers.buildParameter(
                 p.getName(),
@@ -153,9 +180,6 @@ public class BurpAnalyzedRequest {
                 p.getType()
         );
 
-        newRequest = this.helpers.updateParameter(
-                newRequest,
-                newParameter);
-        return newRequest;
+        return this.helpers.updateParameter(newRequest, newParameter);
     }
 }

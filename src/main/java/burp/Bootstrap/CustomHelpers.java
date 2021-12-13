@@ -38,7 +38,7 @@ public class CustomHelpers {
     }
 
     /**
-     * 判断某个List中是否存在指定的 key
+     * 判断某个List中是否存在指定的key
      * 注意: 大小写不区分
      * 如果该 key 存在, 则返回 true, 否则返回 false。
      *
@@ -49,6 +49,24 @@ public class CustomHelpers {
     public static Boolean listKeyExists(String val1, List<String> l1) {
         for (String s : l1) {
             if (s.toLowerCase().equals(val1.toLowerCase())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 判断某个List中是否搜索的到指定的key
+     * 注意: 大小写不区分
+     * 如果该 key 存在, 则返回 true, 否则返回 false。
+     *
+     * @param val1 规定要查找的字符串
+     * @param l1   规定要搜索的List
+     * @return
+     */
+    public static Boolean listKeySearch(String val1, List<String> l1) {
+        for (String s : l1) {
+            if (s.toLowerCase().contains(val1.toLowerCase())) {
                 return true;
             }
         }

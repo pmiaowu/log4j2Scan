@@ -47,7 +47,7 @@ public class RemoteCmd {
         }
 
         List<String> payloads = this.yamlReader.getStringList("application.remoteCmdExtension.config.payloads");
-        if (payloads.size() == 0) {
+        if (payloads == null || payloads.size() == 0) {
             throw new IllegalArgumentException("Application.RemoteCmdExtension-获取的payloads为空,无法正常运行");
         }
 

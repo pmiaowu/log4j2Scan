@@ -15,7 +15,7 @@ import burp.Application.RemoteCmdExtension.RemoteCmd;
 
 public class BurpExtender implements IBurpExtender, IScannerCheck {
     public static String NAME = "log4jScan";
-    public static String VERSION = "1.0.0";
+    public static String VERSION = "1.1.0";
 
     private IBurpExtenderCallbacks callbacks;
     private IExtensionHelpers helpers;
@@ -286,7 +286,7 @@ public class BurpExtender implements IBurpExtender, IScannerCheck {
         String urlSuffix = noParameterUrl.substring(noParameterUrl.lastIndexOf(".") + 1);
 
         List<String> suffixList = this.yamlReader.getStringList("urlBlackListSuffix.suffixList");
-        if (suffixList.size() == 0) {
+        if (suffixList == null || suffixList.size() == 0) {
             return false;
         }
 
