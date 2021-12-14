@@ -119,4 +119,17 @@ public class CustomHelpers {
 
         return null;
     }
+
+    /**
+     * 字符串截取替换
+     *
+     * @param val1 原字符串
+     * @param val2 偏移值的开头位置
+     * @param val3 偏移值的结束位置
+     * @param val4 要替换的值
+     * @return
+     */
+    public static String substringReplace(String val1, int val2, int val3, String val4) {
+        return val1.substring(0, val2) + val4 + val1.substring(val3);
+    }
 }

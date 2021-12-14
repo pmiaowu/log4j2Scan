@@ -119,12 +119,12 @@ public class BurpAnalyzedRequest {
         }
 
         // 数据处理
-        if (this.analyzeRequest().getContentType() == 4 && p.getType() == 6) {
-            // POST请求包提交的数据为json时的处理
-            newRequest = this.buildHttpMessage(p, payload, newHeaders);
+        if (p.getType() == 0 || p.getType() == 1 || p.getType() == 2) {
+            // 数据为,GET,POST,COOKIE时的处理
+            newRequest = this.buildBaseParameter(p, payload, newHeaders);
         } else {
-            // 普通数据格式的处理
-            newRequest = this.buildParameter(p, payload, newHeaders);
+            // 其它数据格式请求处理方法
+            newRequest = this.buildHttpMessage(p, payload, newHeaders);
         }
 
         IHttpRequestResponse newHttpRequestResponse = this.callbacks.makeHttpRequest(this.requestResponse().getHttpService(), newRequest);
@@ -132,50 +132,38 @@ public class BurpAnalyzedRequest {
     }
 
     /**
-     * json数据格式请求处理方法
-     *
-     * @param payload
-     * @return
-     */
-    private byte[] buildHttpMessage(IParameter p, String payload, List<String> headers) {
-        byte[] request = this.requestResponse().getRequest();
-        String requestBody = this.customBurpHelpers.getHttpRequestBody(request);
-
-        String pl = "\"" + p.getName() + "\"" + ":" + "\"" + payload + "\"";
-        String pj1 = "\"" + p.getName() + "\"" + ":" + "\"" + p.getValue() + "\"";
-        String pj2 = "\"" + p.getName() + "\"" + ":" + p.getValue();
-
-        requestBody = requestBody.replace(pj1, pl);
-        requestBody = requestBody.replace(pj2, pl);
-
-        byte[] newRequest = this.helpers.buildHttpMessage(
-                headers,
-                requestBody.getBytes());
-        return newRequest;
-    }
-
-    /**
-     * 普通数据格式的参数构造方法
+     * 普通数据格式的请求处理方法
      *
      * @param p
      * @param payload
+     * @param headers
      * @return
      */
-    private byte[] buildParameter(IParameter p, String payload, List<String> headers) {
+    private byte[] buildBaseParameter(IParameter p, String payload, List<String> headers) {
         byte[] request = this.requestResponse().getRequest();
         String requestBody = this.customBurpHelpers.getHttpRequestBody(request);
 
         // 添加header头
-        byte[] newRequest = this.helpers.buildHttpMessage(
-                headers,
-                requestBody.getBytes());
+        byte[] newRequest = this.helpers.buildHttpMessage(headers, requestBody.getBytes());
 
-        IParameter newParameter = this.helpers.buildParameter(
-                p.getName(),
-                payload,
-                p.getType()
-        );
+        IParameter newParameter = this.helpers.buildParameter(p.getName(), payload, p.getType());
 
         return this.helpers.updateParameter(newRequest, newParameter);
+    }
+
+    /**
+     * 其它数据格式请求处理方法
+     *
+     * @param p
+     * @param payload
+     * @param headers
+     * @return
+     */
+    private byte[] buildHttpMessage(IParameter p, String payload, List<String> headers) {
+        byte[] request = this.requestResponse().getRequest();
+        request = CustomHelpers.substringReplace(new String(request), p.getValueStart(), p.getValueEnd(), payload).getBytes();
+        String requestBody = this.customBurpHelpers.getHttpRequestBody(request);
+        byte[] newRequest = this.helpers.buildHttpMessage(headers, requestBody.getBytes());
+        return newRequest;
     }
 }
