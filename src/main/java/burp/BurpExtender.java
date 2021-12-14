@@ -15,7 +15,7 @@ import burp.Application.RemoteCmdExtension.RemoteCmd;
 
 public class BurpExtender implements IBurpExtender, IScannerCheck {
     public static String NAME = "log4j2Scan";
-    public static String VERSION = "1.2.0";
+    public static String VERSION = "1.3.0";
 
     private IBurpExtenderCallbacks callbacks;
     private IExtensionHelpers helpers;

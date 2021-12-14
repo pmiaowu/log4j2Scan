@@ -48,27 +48,31 @@ public class BurpAnalyzedRequest {
 
         List<String> blackListParameters = this.tags.getBaseSettingTagClass().getBlackListParameters();
 
-        if (analyzeRequest().getParameters().isEmpty()) {
-            return;
+        if (!analyzeRequest().getParameters().isEmpty()) {
+            if (blackListParameters == null || blackListParameters.size() <= 0) {
+                for (IParameter p : analyzeRequest().getParameters()) {
+                    for (Integer type : scanTypeList) {
+                        if (p.getType() == type) {
+                            this.eligibleParameters.add(p);
+                        }
+                    }
+                }
+            } else {
+                for (IParameter p : analyzeRequest().getParameters()) {
+                    for (Integer type : scanTypeList) {
+                        String name = p.getName().trim();
+                        if (!CustomHelpers.listKeyExists(name, blackListParameters) && Integer.valueOf(p.getType()).equals(type)) {
+                            this.eligibleParameters.add(p);
+                        }
+                    }
+                }
+            }
         }
 
-        if (blackListParameters == null || blackListParameters.size() <= 0) {
-            for (IParameter p : analyzeRequest().getParameters()) {
-                for (Integer type : scanTypeList) {
-                    if (p.getType() == type) {
-                        this.eligibleParameters.add(p);
-                    }
-                }
-            }
-        } else {
-            for (IParameter p : analyzeRequest().getParameters()) {
-                for (Integer type : scanTypeList) {
-                    String name = p.getName().trim();
-                    if (!CustomHelpers.listKeyExists(name, blackListParameters) && new Integer(p.getType()).equals(type)) {
-                        this.eligibleParameters.add(p);
-                    }
-                }
-            }
+        // 空参数可以进行扫描时,添加一个GET参数作为标志符
+        Boolean isScanNullParameter = this.tags.getBaseSettingTagClass().isScanNullParameter();
+        if (this.eligibleParameters.size() <= 0 && isScanNullParameter) {
+            this.eligibleParameters.add(this.helpers.buildParameter("headerTest", "test", (byte) 0));
         }
     }
 

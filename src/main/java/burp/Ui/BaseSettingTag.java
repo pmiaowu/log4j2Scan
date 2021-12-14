@@ -21,6 +21,8 @@ public class BaseSettingTag {
     private JCheckBox isScanXmlBox;
     private JCheckBox isScanParamMultipartBox;
 
+    private JCheckBox isScanNullParameterBox;
+
     private JCheckBox isStartRemoteCmdExtensionBox;
 
     public BaseSettingTag(IBurpExtenderCallbacks callbacks, JTabbedPane tabs, YamlReader yamlReader) {
@@ -38,6 +40,7 @@ public class BaseSettingTag {
         this.input2_5(baseSetting, c);
         this.input2_6(baseSetting, c);
         this.input2_7(baseSetting, c);
+        this.input2_8(baseSetting, c);
 
         this.input3_1(baseSetting, c);
         this.input3_2(baseSetting, c);
@@ -129,13 +132,22 @@ public class BaseSettingTag {
         baseSetting.add(this.isScanParamMultipartBox, c);
     }
 
+    private void input2_8(JPanel baseSetting, GridBagConstraints c) {
+        this.isScanNullParameterBox = new JCheckBox("扫描空参数请求", this.yamlReader.getBoolean("scan.type.isScanNullParameter"));
+        this.isScanNullParameterBox.setFont(new Font("Serif", Font.PLAIN, this.isScanNullParameterBox.getFont().getSize()));
+        c.insets = new Insets(5, 5, 5, 5);
+        c.gridx = 0;
+        c.gridy = 10;
+        baseSetting.add(this.isScanNullParameterBox, c);
+    }
+
     private void input3_1(JPanel baseSetting, GridBagConstraints c) {
         JLabel br_lbl_3_1 = new JLabel("应用程序配置");
         br_lbl_3_1.setForeground(new Color(255, 89, 18));
         br_lbl_3_1.setFont(new Font("Serif", Font.PLAIN, br_lbl_3_1.getFont().getSize() + 2));
         c.insets = new Insets(15, 5, 5, 5);
         c.gridx = 0;
-        c.gridy = 10;
+        c.gridy = 11;
         baseSetting.add(br_lbl_3_1, c);
     }
 
@@ -144,7 +156,7 @@ public class BaseSettingTag {
         this.isStartRemoteCmdExtensionBox.setFont(new Font("Serif", Font.PLAIN, this.isStartRemoteCmdExtensionBox.getFont().getSize()));
         c.insets = new Insets(5, 5, 5, 5);
         c.gridx = 0;
-        c.gridy = 11;
+        c.gridy = 12;
         baseSetting.add(this.isStartRemoteCmdExtensionBox, c);
     }
 
@@ -195,5 +207,9 @@ public class BaseSettingTag {
 
     public Boolean isStartRemoteCmdExtension() {
         return this.isStartRemoteCmdExtensionBox.isSelected();
+    }
+
+    public Boolean isScanNullParameter() {
+        return this.isScanNullParameterBox.isSelected();
     }
 }

