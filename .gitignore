@@ -5,4 +5,4 @@
 .project
 out
 target
-log4jScan.iml
+log4j2Scan.iml

@@ -14,8 +14,8 @@ import burp.CustomErrorException.TaskTimeoutException;
 import burp.Application.RemoteCmdExtension.RemoteCmd;
 
 public class BurpExtender implements IBurpExtender, IScannerCheck {
-    public static String NAME = "log4jScan";
-    public static String VERSION = "1.1.0";
+    public static String NAME = "log4j2Scan";
+    public static String VERSION = "1.1.1";
 
     private IBurpExtenderCallbacks callbacks;
     private IExtensionHelpers helpers;
@@ -167,7 +167,7 @@ public class BurpExtender implements IBurpExtender, IScannerCheck {
                     this.helpers.analyzeRequest(baseRequestResponse).getMethod(),
                     baseBurpUrl.getHttpRequestUrl().toString(),
                     this.helpers.analyzeResponse(baseRequestResponse.getResponse()).getStatusCode() + "",
-                    "[-] not found log4j command execution",
+                    "[-] not found log4j2 command execution",
                     baseRequestResponse
             );
         } catch (TaskTimeoutException e) {
@@ -261,7 +261,7 @@ public class BurpExtender implements IBurpExtender, IScannerCheck {
                 this.helpers.analyzeRequest(httpRequestResponse).getMethod(),
                 new CustomBurpUrl(this.callbacks, httpRequestResponse).getHttpRequestUrl().toString(),
                 this.helpers.analyzeResponse(httpRequestResponse.getResponse()).getStatusCode() + "",
-                "[+] found log4j command execution",
+                "[+] found log4j2 command execution",
                 remoteCmd.run().getHttpRequestResponse()
         );
 

