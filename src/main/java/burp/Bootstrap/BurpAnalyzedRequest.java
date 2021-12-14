@@ -119,7 +119,7 @@ public class BurpAnalyzedRequest {
         }
 
         // 数据处理
-        if (this.analyzeRequest().getContentType() == 4) {
+        if (this.analyzeRequest().getContentType() == 4 && p.getType() == 6) {
             // POST请求包提交的数据为json时的处理
             newRequest = this.buildHttpMessage(p, payload, newHeaders);
         } else {
