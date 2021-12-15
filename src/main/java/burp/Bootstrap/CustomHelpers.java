@@ -2,6 +2,10 @@ package burp.Bootstrap;
 
 import java.util.*;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.parser.ParserConfig;
+
 public class CustomHelpers {
     /**
      * 随机取若干个字符
@@ -131,5 +135,60 @@ public class CustomHelpers {
      */
     public static String substringReplace(String val1, int val2, int val3, String val4) {
         return val1.substring(0, val2) + val4 + val1.substring(val3);
+    }
+
+    /**
+     * 判断是否为json
+     *
+     * @param str
+     * @return
+     */
+    public static boolean isJson(String str) {
+        // 防止被日,一定要开
+        ParserConfig.getGlobalInstance().setSafeMode(true);
+        try {
+            // 替换特殊字符,
+            String randomStr = "$" + randomStr(20) + "$";
+            str = str.replace("@", randomStr);
+            JSONObject.parseObject(str);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * json字符串值替换
+     * 该功能会递归将所有json的value替换成指定字符串
+     *
+     * @param var1 json字符串
+     * @param var2 要被替换的内容
+     * @return
+     */
+    public static String jsonStringValueReplace(String var1, String var2) {
+        // 防止被日,一定要开
+        ParserConfig.getGlobalInstance().setSafeMode(true);
+
+        // 替换特殊字符,
+        String randomStr = "$" + randomStr(20) + "$";
+        var1 = var1.replace("@", randomStr);
+
+        // 开始正式替换
+        JSONObject jsonObject = JSONObject.parseObject(var1);
+        for (String k : jsonObject.keySet()) {
+            if (jsonObject.get(k) instanceof JSONArray) {
+                JSONArray arr = JSONObject.parseArray(jsonObject.getString(k));
+                for (int i = 0; i < arr.size(); i++) {
+                    Object o = arr.get(i);
+                    arr.set(i, jsonStringValueReplace(o.toString(), var2));
+                }
+                jsonObject.put(k, arr);
+            } else {
+                jsonObject.put(k, var2);
+            }
+        }
+
+        // 返回,并且把前面的特殊字符,替换回来
+        return jsonObject.toJSONString().replace(randomStr, "@");
     }
 }

@@ -135,8 +135,26 @@ public class RemoteCmdScan extends AAppExtension {
             }
         }
 
+        String newPayload = "";
+        if (CustomHelpers.isJson(parameter.getValue())) {
+            // 参数为json时的payload构造方法
+            // 例如: a={"a":1,"b":"ccccc"}
+            String jsonPayload = CustomHelpers.jsonStringValueReplace(parameter.getValue(), payload);
+            String[] jsonPayloadList = jsonPayload.split("dnslog-url");
+            for (int i = 0; i < jsonPayloadList.length; i++) {
+                if (jsonPayloadList.length != (i + 1)) {
+                    newPayload += jsonPayloadList[i] + (i + 1) + "." + "json" + "." + dnsLogUrl;
+                } else {
+                    newPayload += jsonPayloadList[i];
+                }
+            }
+        } else {
+            // 构造普通参数的payload
+            newPayload = payload.replace("dnslog-url", dnsLogUrl);
+        }
+
         // 发送请求
-        IHttpRequestResponse newHttpRequestResponse = analyzedRequest.makeHttpRequest(parameter, payload.replace("dnslog-url", dnsLogUrl), newHeaders);
+        IHttpRequestResponse newHttpRequestResponse = analyzedRequest.makeHttpRequest(parameter, newPayload, newHeaders);
 
         // 相关变量设置
         this.keyArrayList.add(key);
