@@ -18,8 +18,38 @@ scan:
   issueNumber: 1
   # 站点扫描次数
   # 超过次数以后就不在对该站点进行扫描了
+  # 同个站点,个人建议扫描10次就差不多了
   # 0 表示无限次扫描
   siteScanNumber: 0
+  # 域名扫描规则
+  domainName:
+    # 域名黑名单
+    # 注: 黑名单优先级最高
+    # 注: 为空表示关闭该功能
+    # 使用规则:
+    # 1. 过滤某个域名: www.domain1.com
+    # 2. 过滤某个域名的全部子域名: *.domain2.com
+    # 3. 过滤某个域名的部分子域名: a.*.domain2.com/*.a.*.domain2.com
+    # 使用方法:
+    # blacklist:
+    #   - "www.domain1.com"
+    #   - "*.domain2.com"
+    blacklist:
+      - "*.dnslog.cn"
+      - "*.ceye.io"
+      - "*.fofa.so"
+    # 域名白名单
+    # 注: 黑名单优先级最高
+    # 注: 为空表示关闭该功能
+    # 使用规则:
+    # 1. 只扫描某个域名: www.domain1.com
+    # 2. 只扫描某个域名的全部子域名: *.domain2.com
+    # 3. 只扫描某个域名的部分子域名: a.*.domain2.com/*.a.*.domain2.com
+    # 使用方法:
+    # whitelist:
+    #   - "www.domain1.com"
+    #   - "*.domain2.com"
+    whitelist:
   # 扫描类型
   type:
     # 用于判断是否扫描 get请求
