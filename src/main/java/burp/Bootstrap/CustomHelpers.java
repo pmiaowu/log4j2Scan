@@ -146,7 +146,12 @@ public class CustomHelpers {
     public static boolean isJson(String str) {
         // 防止被日,一定要开
         ParserConfig.getGlobalInstance().setSafeMode(true);
+        str = str.trim();
         try {
+            if (str == null || str.length() <= 0) {
+                return false;
+            }
+
             // 替换特殊字符,
             String randomStr = "$" + randomStr(20) + "$";
             str = str.replace("@", randomStr);

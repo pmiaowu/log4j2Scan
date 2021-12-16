@@ -16,7 +16,7 @@ import burp.Application.RemoteCmdExtension.RemoteCmd;
 
 public class BurpExtender implements IBurpExtender, IScannerCheck {
     public static String NAME = "log4j2Scan";
-    public static String VERSION = "1.5.0";
+    public static String VERSION = "1.5.1";
 
     private IBurpExtenderCallbacks callbacks;
     private IExtensionHelpers helpers;
@@ -66,8 +66,8 @@ public class BurpExtender implements IBurpExtender, IScannerCheck {
     public List<IScanIssue> doPassiveScan(IHttpRequestResponse baseRequestResponse) {
         List<IScanIssue> issues = new ArrayList<>();
 
-        List<String> domainNameBlacklist = yamlReader.getStringList("scan.domainName.blacklist");
-        List<String> domainNameWhitelist = yamlReader.getStringList("scan.domainName.whitelist");
+        List<String> domainNameBlacklist = this.yamlReader.getStringList("scan.domainName.blacklist");
+        List<String> domainNameWhitelist = this.yamlReader.getStringList("scan.domainName.whitelist");
 
         // 基础url解析
         CustomBurpUrl baseBurpUrl = new CustomBurpUrl(this.callbacks, baseRequestResponse);
