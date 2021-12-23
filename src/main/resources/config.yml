@@ -231,7 +231,6 @@ application:
         - "Sec-Ch-Ua"
         - "Sec-Ch-Ua-Platform"
         - "Upgrade-Insecure-Requests"
-        - "Accept"
         - "Sec-Fetch-Site"
         - "Sec-Fetch-Mode"
         - "Sec-Fetch-User"
