@@ -113,7 +113,7 @@ public class BurpAnalyzedRequest {
         List<String> newHeaders = new ArrayList<>();
         if (headers != null && headers.size() != 0) {
             for (String h : this.analyzeRequest().getHeaders()) {
-                if (!CustomHelpers.listKeySearch(h.split(": ")[0], headers)) {
+                if (!CustomHelpers.listKeySearch(h.split(": ")[0] + ": ", headers)) {
                     newHeaders.add(h);
                 }
             }

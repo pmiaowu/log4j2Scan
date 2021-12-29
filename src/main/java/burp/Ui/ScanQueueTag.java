@@ -36,7 +36,7 @@ public class ScanQueueTag extends AbstractTableModel implements IMessageEditorCo
 
         // 请求与响应界面的分隔面板规则
         HjSplitPane = new JSplitPane();
-        HjSplitPane.setDividerLocation(0.5D);
+        HjSplitPane.setResizeWeight(0.5);
 
         // 请求的面板
         Ltable = new JTabbedPane();
