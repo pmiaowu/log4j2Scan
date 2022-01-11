@@ -6,7 +6,7 @@
 
     <groupId>com.github.pmiaowu</groupId>
     <artifactId>log4j2Scan</artifactId>
-    <version>1.5.7</version>
+    <version>1.5.8</version>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/net.portswigger.burp.extender/burp-extender-api -->
