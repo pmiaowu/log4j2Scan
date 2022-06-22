@@ -11,12 +11,15 @@ import burp.DnsLogModule.DnsLog;
 import burp.Bootstrap.YamlReader;
 import burp.Bootstrap.CustomBurpUrl;
 import burp.Bootstrap.BurpAnalyzedRequest;
+import burp.Bootstrap.GlobalVariableReader;
 import burp.CustomErrorException.TaskTimeoutException;
 import burp.Application.RemoteCmdExtension.RemoteCmd;
 
-public class BurpExtender implements IBurpExtender, IScannerCheck {
+public class BurpExtender implements IBurpExtender, IScannerCheck, IExtensionStateListener {
     public static String NAME = "log4j2Scan";
-    public static String VERSION = "1.5.8";
+    public static String VERSION = "1.6.0";
+
+    private GlobalVariableReader globalVariableReader;
 
     private IBurpExtenderCallbacks callbacks;
     private IExtensionHelpers helpers;
@@ -36,6 +39,15 @@ public class BurpExtender implements IBurpExtender, IScannerCheck {
         this.stdout = new PrintWriter(callbacks.getStdout(), true);
         this.stderr = new PrintWriter(callbacks.getStderr(), true);
 
+        // 全局变量的数据保存地址
+        // 用于在程序执行的过程中能够实时的修改变量数据使用
+        this.globalVariableReader = new GlobalVariableReader();
+
+        // 是否卸载扩展
+        // 用于卸载插件以后,把程序快速退出去,避免卡顿
+        // true = 已被卸载, false = 未卸载
+        this.globalVariableReader.putBooleanData("isExtensionUnload", false);
+
         // 标签界面
         this.tags = new Tags(callbacks, NAME);
 
@@ -44,6 +56,7 @@ public class BurpExtender implements IBurpExtender, IScannerCheck {
 
         callbacks.setExtensionName(NAME);
         callbacks.registerScannerCheck(this);
+        callbacks.registerExtensionStateListener(this);
 
         // 基本信息输出
         // 作者拿来臭美用的 ╰(*°▽°*)╯
@@ -266,7 +279,7 @@ public class BurpExtender implements IBurpExtender, IScannerCheck {
         }
 
         DnsLog dnsLog = new DnsLog(this.callbacks, this.yamlReader.getString("dnsLogModule.provider"));
-        RemoteCmd remoteCmd = new RemoteCmd(this.callbacks, analyzedRequest, dnsLog, this.yamlReader, provider);
+        RemoteCmd remoteCmd = new RemoteCmd(this.globalVariableReader, this.callbacks, analyzedRequest, dnsLog, this.yamlReader, provider);
         if (!remoteCmd.run().isIssue()) {
             return null;
         }
@@ -427,5 +440,10 @@ public class BurpExtender implements IBurpExtender, IScannerCheck {
             }
         }
         return false;
+    }
+
+    @Override
+    public void extensionUnloaded() {
+        this.globalVariableReader.putBooleanData("isExtensionUnload", true);
     }
 }
