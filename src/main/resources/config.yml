@@ -180,6 +180,8 @@ urlBlackListSuffix:
     - "flv"
     - "vob"
     - "txt"
+    - "php"
+    - "asp"
 
 # 黑名单参数
 # 请求出现这些字段的都不进行测试
