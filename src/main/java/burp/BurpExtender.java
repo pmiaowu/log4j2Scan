@@ -157,8 +157,8 @@ public class BurpExtender implements IBurpExtender, IScannerCheck, IExtensionSta
         // 判断当前站点是否超出扫描数量了
         Integer siteScanNumber = this.yamlReader.getInteger("scan.siteScanNumber");
         if (siteScanNumber != 0) {
-            Integer siteJsonNumber = this.getSiteNumber(baseBurpUrl.getRequestDomainName());
-            if (siteJsonNumber >= siteScanNumber) {
+            Integer siteNumber = this.getSiteNumber(baseBurpUrl.getRequestDomainName());
+            if (siteNumber >= siteScanNumber) {
                 if (messageLevel.equals("ALL") || messageLevel.equals("INFO")) {
                     this.tags.getScanQueueTagClass().add(
                             "",

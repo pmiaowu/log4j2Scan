@@ -1,6 +1,5 @@
 package burp.Ui;
 
-
 import java.awt.*;
 import java.util.List;
 import java.util.ArrayList;
