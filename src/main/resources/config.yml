@@ -216,6 +216,7 @@ application:
       # 添加这些header头,并不会产生额外的请求,放心添加
       # 注: 为空表示关闭该功能
       headers:
+        - "Accept"
         - "User-Agent"
         - "X-Client-IP"
         - "X-Remote-IP"
