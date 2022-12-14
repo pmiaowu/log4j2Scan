@@ -1,6 +1,8 @@
 package burp.Application.RemoteCmdExtension.ExtensionMethod;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -158,6 +160,12 @@ public class RemoteCmdScan extends AAppExtension {
                 } else {
                     newPayload += jsonPayloadList[i];
                 }
+            }
+        } else if (parameter.getType() == 0) {
+            try {
+                newPayload = URLEncoder.encode(payload.replace("dnslog-url", dnsLogUrl), "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace(new PrintWriter(callbacks.getStderr(), true));
             }
         } else {
             // 构造普通参数的payload
