@@ -1,13 +1,12 @@
 package burp.Bootstrap;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 
 import org.yaml.snakeyaml.Yaml;
 
@@ -18,18 +17,18 @@ public class YamlReader {
 
     private static Map<String, Map<String, Object>> properties = new HashMap<>();
 
-    private YamlReader(IBurpExtenderCallbacks callbacks) throws FileNotFoundException {
+    private YamlReader(IBurpExtenderCallbacks callbacks) throws IOException {
         CustomBurpHelpers customBurpHelpers = new CustomBurpHelpers(callbacks);
-        String c = customBurpHelpers.getExtensionFilePath() + "resources/config.yml";
-        File f = new File(c);
-        properties = new Yaml().load(new FileInputStream(f));
+        Path p = customBurpHelpers.getExtensionFilePath().resolve("resources/config.yml");
+        File f = new File(p.toString());
+        properties = new Yaml().load(Files.newInputStream(f.toPath()));
     }
 
     public static synchronized YamlReader getInstance(IBurpExtenderCallbacks callbacks) {
         if (instance == null) {
             try {
                 instance = new YamlReader(callbacks);
-            } catch (FileNotFoundException e) {
+            } catch (IOException e) {
                 e.printStackTrace(new PrintWriter(callbacks.getStderr(), true));
             }
         }

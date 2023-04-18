@@ -2,6 +2,8 @@ package burp.Bootstrap;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import burp.*;
 
@@ -19,11 +21,8 @@ public class CustomBurpHelpers {
      *
      * @return
      */
-    public String getExtensionFilePath() {
-        String path = "";
-        Integer lastIndex = this.callbacks.getExtensionFilename().lastIndexOf(File.separator);
-        path = this.callbacks.getExtensionFilename().substring(0, lastIndex) + File.separator;
-        return path;
+    public Path getExtensionFilePath() {
+        return Paths.get(this.callbacks.getExtensionFilename()).getParent();
     }
 
     /**
